@@ -49,7 +49,7 @@ pid_t run_with_redir(cmd_struct* command, int n_pipes, int (*pipes)[2]) {
     }
   } else {  // We are the child. */
     exec_with_redir(command, n_pipes, pipes);
-    perror("OH DEAR");
+    perror("GRESIT!");
     return 0;
   }
 }
@@ -59,7 +59,11 @@ int main() {
   char *line = NULL;
   size_t len = 0;
 
-  while(prompt_and_get_input("heeee> ", &line, &len) > 0) {
+  while(prompt_and_get_input("mini.shell> ", &line, &len) > 0) {
+    if(strcmp(line, "exit\n")==0 || strcmp(line, "exit")==0){
+    break;
+    }
+
     pipeline_struct* pipeline = parse_pipeline(line);
     int n_pipes = pipeline->n_cmds - 1;
     //print_pipeline(pipeline);
