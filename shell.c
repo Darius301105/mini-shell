@@ -3,6 +3,8 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#include <signal.h>
+
 #include "utils.h"
 
 #define MAX_HISTORY 100
@@ -103,6 +105,10 @@ void expand_env_vars_in_command(cmd_struct* command){
   }
 }
 
+void handle_sigint(int sig){
+  (void)sig;
+  write(STDOUT_FILENO, "\n", 1);
+}
 
 int main() {
   char *line = NULL;
@@ -111,6 +117,7 @@ int main() {
   char prompt[1200];
   char *history[MAX_HISTORY] = {0};
   int history_count = 0;
+  signal(SIGINT, handle_sigint);
 
   while(1) {
     if(getcwd(cwd, sizeof(cwd)) != NULL){
