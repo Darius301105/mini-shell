@@ -63,6 +63,25 @@ int main() {
     if(strcmp(line, "exit\n")==0 || strcmp(line, "exit")==0){
     break;
     }
+    if(strcmp(line, "cd\n") == 0 || strcmp(line, "cd") == 0){
+      char *home = getenv("HOME");
+      if(home == NULL){
+      fprintf(stderr, "GRESIT: HOME nu exista!\n");
+      }else if(chdir(home)!=0){
+       perror("GRESIT");
+      }
+      continue;
+    }
+    
+    if(strncmp(line, "cd ", 3) == 0){
+      line[strcspn(line, "\n")] = '\0';
+      char *path = line+3;
+
+      if(chdir(path) != 0){
+       perror("GRESIT");
+      }
+      continue;
+    }
 
     pipeline_struct* pipeline = parse_pipeline(line);
     int n_pipes = pipeline->n_cmds - 1;
