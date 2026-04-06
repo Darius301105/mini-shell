@@ -32,19 +32,14 @@ This shell currently supports:
 
 ## Build
 
-Compile with:
-
-```bash
-make
+Compile with:``` make```
 
 ## Run
 
-Run with: ./shell
+Run with:``` ./shell```
 
 ## Notes
-
-## Notes
-
+```
 This project started from a shell workshop skeleton and was used by me as a personal tutorial project.
 
 I extended it step by step in order to better understand Linux processes, shell built-ins, pipes, environment variables, and signal handling.
