@@ -32,11 +32,11 @@ This shell currently supports:
 
 ## Build
 
-Compile with:``` make```
+Compile with:`make`
 
 ## Run
 
-Run with:``` ./shell```
+Run with:`./shell`
 
 ## Notes
 ```
