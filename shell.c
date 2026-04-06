@@ -60,9 +60,23 @@ int main() {
   size_t len = 0;
 
   while(prompt_and_get_input("mini.shell> ", &line, &len) > 0) {
+
+    if(strcmp(line, "\n") == 0 || strcmp(line, "") == 0){
+      continue;
+    }
+
+    if(strcmp(line, "help\n") == 0 || strcmp(line, "help") == 0){
+      printf("Built-in commands:\n");
+      printf(" exit - exit shell\n");
+      printf(" cd [dir] - change directory\n");
+      printf(" help - help message\n");
+      continue;
+    }
+
     if(strcmp(line, "exit\n")==0 || strcmp(line, "exit")==0){
     break;
     }
+
     if(strcmp(line, "cd\n") == 0 || strcmp(line, "cd") == 0){
       char *home = getenv("HOME");
       if(home == NULL){
@@ -72,7 +86,7 @@ int main() {
       }
       continue;
     }
-    
+
     if(strncmp(line, "cd ", 3) == 0){
       line[strcspn(line, "\n")] = '\0';
       char *path = line+3;
@@ -91,7 +105,7 @@ int main() {
     int (*pipes)[2] = calloc(sizeof(int[2]), n_pipes);
 
     for (int i = 1; i < pipeline->n_cmds; ++i) {
-      pipe(pipes[i-1]);  
+      pipe(pipes[i-1]);
       pipeline->cmds[i]->redirect[STDIN_FILENO] = pipes[i-1][0];
       pipeline->cmds[i-1]->redirect[STDOUT_FILENO] = pipes[i-1][1];
     }
@@ -106,7 +120,6 @@ int main() {
     for (int i = 0; i < pipeline->n_cmds; ++i) {
       wait(NULL);
     }
-    
   }
   fputs("\n", stderr);
   return 0;
