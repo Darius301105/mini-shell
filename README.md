@@ -1,58 +1,52 @@
 # mini-shell
 
-A simple Unix-like shell written in C, built as part of a shell workshop and extended with additional functionality.
+A small Unix-like shell in C, used as a personal learning project to understand how shells work on Linux.
 
-## Features
+This repository was primarily a tutorial / workshop-based practice project for me. I used it to learn and experiment with concepts such as:
+
+- reading input from the terminal
+- running programs with `fork()` and `execvp()`
+- waiting for child processes with `wait()`
+- built-in commands like `cd` and `exit`
+- pipelines
+- environment variable expansion
+- background execution with `&`
+- signal handling with `SIGINT`
+
+## Current features
 
 This shell currently supports:
 
-- running external commands
+- external commands
 - pipelines using `|`
-- input/output redirection support from the workshop skeleton
 - built-in `exit`
 - built-in `cd`
-- built-in `help`
 - built-in `pwd`
-- ignoring empty input lines
+- built-in `help`
+- command history
+- simple environment variable expansion (`$HOME`, `$USER`, etc.)
+- `cd ~` and `cd ~/folder`
+- background execution with `&`
 - dynamic prompt showing the current working directory
-
-## Built-in commands
-
-- `exit` - exits the shell
-- `cd [dir]` - changes the current directory
-- `pwd` - prints the current working directory
-- `help` - displays available built-in commands
-
-## Example
-
-```bash
-mini-shell:/home/user/shell-workshop$ pwd
-/home/user/shell-workshop
-
-mini-shell:/home/user/shell-workshop$ cd ..
-mini-shell:/home/user$ pwd
-/home/user
-
-mini-shell:/home/user$ ls | grep shell
-mini-shell
+- basic `SIGINT` handling
 
 ## Build
-Compile the project with: make
+
+Compile with:
+
+```bash
+make
 
 ## Run
-Run the shell with ./shell
 
-## Project structure
-shell.c - main shell logic
-utils.c - helper functions
-utils.h - declarations for helper functions
-Makefile - build configuration
+Run with: ./shell
 
 ## Notes
-This project was based on the shell-workshop skeleton and adapted for compatibility with modern Ubuntu toolchains.
 
-Additional improvements implemented in this version include:
-Ubuntu Makefile compatibility fix
-built-in shell commands
-dynamic prompt
-better interactive behavior for empty input
+## Notes
+
+This project started from a shell workshop skeleton and was used by me as a personal tutorial project.
+
+I extended it step by step in order to better understand Linux processes, shell built-ins, pipes, environment variables, and signal handling.
+
+After this learning project, my next goal is to build a simpler shell completely from scratch.
