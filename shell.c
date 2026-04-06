@@ -58,8 +58,18 @@ pid_t run_with_redir(cmd_struct* command, int n_pipes, int (*pipes)[2]) {
 int main() {
   char *line = NULL;
   size_t len = 0;
+  char cwd[1024];
+  char prompt[1200];
 
-  while(prompt_and_get_input("mini.shell> ", &line, &len) > 0) {
+  while(1) {
+    if(getcwd(cwd, sizeof(cwd)) != NULL){
+      snprintf(prompt, sizeof(prompt), "mini-shell:%s$ ", cwd);
+    }else{
+      snprintf(prompt, sizeof(prompt), "mini-shell$ ");
+    }
+    if(prompt_and_get_input(prompt, &line, &len) <= 0){
+      break;
+    }
 
     if(strcmp(line, "\n") == 0 || strcmp(line, "") == 0){
       continue;
@@ -76,6 +86,16 @@ int main() {
     if(strcmp(line, "exit\n")==0 || strcmp(line, "exit")==0){
     break;
     }
+
+    if(strcmp(line, "pwd\n") == 0 || strcmp(line, "pwd") == 0){
+      if(getcwd(cwd, sizeof(cwd)) != NULL){
+        printf("%s\n", cwd);
+      }else{
+        perror("GRESIT");
+      }
+      continue;
+    }
+
 
     if(strcmp(line, "cd\n") == 0 || strcmp(line, "cd") == 0){
       char *home = getenv("HOME");
