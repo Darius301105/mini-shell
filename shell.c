@@ -3,9 +3,9 @@
 #include <string.h>
 #include <sys/wait.h>
 #include <unistd.h>
-
 #include "utils.h"
 
+#define MAX_HISTORY 100
 
 ssize_t prompt_and_get_input(const char* prompt,
                             char **line,
@@ -60,6 +60,8 @@ int main() {
   size_t len = 0;
   char cwd[1024];
   char prompt[1200];
+  char *history[MAX_HISTORY] = {0};
+  int history_count = 0;
 
   while(1) {
     if(getcwd(cwd, sizeof(cwd)) != NULL){
@@ -69,6 +71,12 @@ int main() {
     }
     if(prompt_and_get_input(prompt, &line, &len) <= 0){
       break;
+    }
+    if(strcmp(line, "\n") != 0 && strcmp(line, "") != 0){
+      if(history_count < MAX_HISTORY){
+        history[history_count] = strdup(line);
+        history_count++;
+      }
     }
 
     if(strcmp(line, "\n") == 0 || strcmp(line, "") == 0){
@@ -80,6 +88,7 @@ int main() {
       printf(" exit - exit shell\n");
       printf(" cd [dir] - change directory\n");
       printf(" help - help message\n");
+      printf(" history - command history\n");
       continue;
     }
 
@@ -107,12 +116,32 @@ int main() {
       continue;
     }
 
+    if(strcmp(line, "cd ~\n") == 0 || strcmp(line, "cd ~") == 0){
+      char *home = getenv("HOME");
+      if(home == NULL){
+        fprintf(stderr, "GRESIT: HOME nu exista!\n");
+      }else if(chdir(home) != 0){
+        perror("GRESIT");
+      }
+      continue;
+    }
+
     if(strncmp(line, "cd ", 3) == 0){
       line[strcspn(line, "\n")] = '\0';
       char *path = line+3;
 
       if(chdir(path) != 0){
        perror("GRESIT");
+      }
+      continue;
+    }
+
+    if(strcmp(line, "history\n") == 0 || strcmp(line, "history") == 0){
+      for(int i=0;i<history_count;i++){
+        printf("%d %s", i+1, history[i]);
+	if(history[i][strlen(history[i]) - 1] != '\n'){
+          printf("\n");
+        }
       }
       continue;
     }
